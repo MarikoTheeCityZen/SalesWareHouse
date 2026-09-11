@@ -16,7 +16,8 @@ create table silver.customer_master(
 	cst_marital_status varchar(50),
 	cst_gndr varchar(50),
 	cst_create_date date,
-	_created_at datetime2,
+	_created_at datetime2 not null
+	default sysutcdatetime() ,
 	_source_system nvarchar(200)
 );
 go
@@ -32,7 +33,8 @@ customer_id varchar(100),
 customer_key nvarchar(100),
 birthdate date,
 gender nvarchar(50),
-_created_at datetime2,
+_created_at datetime2 not null
+default sysutcdatetime() ,
 _source_system nvarchar(200)
 );
 go
@@ -46,7 +48,8 @@ go
 create table silver.customer_locations(
 customer_key nvarchar(100),
 country nvarchar(100),
-_created_at datetime2,
+_created_at datetime2 not null
+default sysutcdatetime() ,
 _source_system nvarchar(200)
 );
 go
@@ -67,8 +70,8 @@ product_cost int,
 product_line varchar(20),
 start_date date,
 end_date date,
-prd_end_date date,
-_created_at datetime2,
+_created_at datetime2 not null
+default sysutcdatetime(),
 _source_system nvarchar(200)
 );
 go
@@ -84,7 +87,8 @@ cat_id nvarchar(50),
 category nvarchar(100),
 subcategory nvarchar(100),
 maintanance nvarchar(20),
-_created_at datetime2,
+_created_at datetime2 not null
+default sysutcdatetime() ,
 _source_system nvarchar(200)
 );
 go
@@ -104,7 +108,8 @@ due_date varchar(50),
 sales varchar(50),
 quantity varchar(50),
 price varchar(50),
-_created_at datetime2,
+_created_at datetime2 not null
+default sysutcdatetime() ,
 _source_system nvarchar(200)
 );
 go
