@@ -34,7 +34,7 @@ create table bronze.crm_cust_info(
 	cst_marital_status varchar(20),
 	cst_gndr varchar(20),
 	cst_create_date datetime2,
-	_created_at datetime  not null default getdate(),
+	_created_at datetime  not null default sysutcdatetime(),
 	_source_system nvarchar(100) not null default 'crm/cust_info.csv'
 );
 go
@@ -60,7 +60,7 @@ create table bronze.erp_cust_az12(
 cid nvarchar(100),
 bdate date,
 gen nvarchar(50),
-_created_at datetime2  not null default getdate(),
+_created_at datetime2  not null default sysutcdatetime(),
 _source_system nvarchar(100) not null default 'erp/cust_az12.csv'
 );
 go
@@ -83,7 +83,7 @@ go
 create table bronze.erp_cust_loc_a101(
 cid nvarchar(100),
 cntry nvarchar(100),
-_created_at datetime2  not null default getdate(),
+_created_at datetime2  not null default sysutcdatetime(),
 _source_system nvarchar(100) not null default 'erp/cust_loc_a101.csv'
 );
 go
@@ -116,7 +116,7 @@ prd_cost int,
 prd_line varchar(20),
 prd_start_date date,
 prd_end_date date,
-_created_at datetime2  not null default getdate(),
+_created_at datetime2  not null default sysutcdatetime(),
 _source_system nvarchar(100) not null default 'crm/prd_info.csv'
 );
 go
@@ -143,7 +143,7 @@ id nvarchar(50),
 cat nvarchar(100),
 subcat nvarchar(100),
 maintanance nvarchar(20),
-_created_at datetime2  not null default getdate(),
+_created_at datetime2  not null default sysutcdatetime(),
 _source_system nvarchar(100) not null default 'erp/cat_g1v2.csv'
 );
 go
@@ -180,7 +180,7 @@ sls_due_dt varchar(50),
 sls_sales varchar(50),
 sls_quantity varchar(50),
 sls_price varchar(50),
-_created_at datetime2  not null default getdate(),
+_created_at datetime2  not null  default sysutcdatetime(),
 _source_system nvarchar(100) not null default 'crm/sales_details.csv'
 );
 go
