@@ -1,7 +1,7 @@
 use SalesWH;
 go
 
-create procedure etl.load_silver as
+create or alter procedure etl.load_silver as
 begin
 	begin try
 		print('---------------------------BATCH START---------------------------')
@@ -35,22 +35,22 @@ begin
 		truncate table silver.customer_master
 
 		insert into silver.customer_master
+		(customer_id,customer_key,cst_firstname,cst_lastname,cst_marital_status,cst_gndr,cst_create_date,_source_system)
 		select
 		cst_id as customer_id,
 		cst_key as customer_key,
-		trim(cst_firstname)as first_name,
-		trim(cst_lastname) as last_name,
+		trim(cst_firstname)as cst_firstname,
+		trim(cst_lastname) as cst_lastname,
 		case when upper(cst_marital_status)='M' then 'Married'
 			 when upper(cst_marital_status)='S' then 'Single'
 			 else 'n/a' 
-		end as marital_status,
+		end as cst_marital_status,
 		case when upper(cst_gndr)='F' then 'Female'
 			 when upper(cst_gndr)='M' then 'Male'
 			 else 'n/a' 
-		end as gender,
-		cast(cst_create_date as date) as create_date,
-		_created_at,
-		_source_system
+		end as cst_gndr,
+		cast(cst_create_date as date) as cst_create_date,
+		'bronze.crm_cust_info'
 		from
 		(
 			select 
@@ -90,20 +90,20 @@ begin
 		truncate table silver.customer_info
 
 		insert into silver.customer_info
+		(customer_id,customer_key,birthdate,gender,_source_system)
 		select 
 		cid as customer_id,
 		case when cid like 'NAS%' then SUBSTRING(cid,4,len(cid))
 			 else cid
 		end as customer_key,
-		cast(bdate as date) as birth_date,
+		cast(bdate as date) as birthdate,
 		coalesce(case  trim(gen)
 			  when'F' then 'Female'
 			  when'M' then 'Male'
 			  when '' then NULL
 			  else trim(gen)
 		end,'n/a') as gender,
-		_created_at,
-		_source_system
+		'bronze.erp_cust_az12'
 		from bronze.erp_cust_az12
 
 		set @target_rows=@@ROWCOUNT
@@ -139,11 +139,11 @@ begin
 		truncate table silver.customer_locations
 
 		insert into silver.customer_locations
+		(customer_key,country,_source_system)
 		select 
 		REPLACE(cid,'-','') as customer_key,
 		trim(cntry) as country,
-		_created_at,
-		_source_system
+		'bronze.erp_cust_loc_a101'
 		from  bronze.erp_cust_loc_a101
 
 		set @target_rows=@@ROWCOUNT
@@ -178,6 +178,7 @@ begin
 		truncate table silver.products
 
 		insert into silver.products
+		(product_id,product_key,cat_id,_product_key,product_number,product_cost,product_line,start_date,end_date,_source_system)
 		select
 		prd_id as product_id,
 		prd_key as product_key,
@@ -188,9 +189,7 @@ begin
 		trim(prd_line) as product_line,
 		cast(prd_start_date as date) as start_date,
 		cast(dateadd(day,-1,lead(prd_start_date) over(partition by prd_key order by prd_start_date)) as date) as end_date,
-		cast(prd_end_date as date) ,
-		_created_at,
-		_source_system
+		'bronze.crm_prd_info'
 		from bronze.crm_prd_info
 
 		set @target_rows=@@ROWCOUNT
@@ -226,13 +225,13 @@ begin
 		truncate table silver.product_categories
 
 		insert into silver.product_categories
+		(cat_id,category,subcategory,maintanance,_source_system)
 		select 
 		replace(id,'_','-') as cat_id,
 		trim(cat) as category,
 		trim(subcat) as subcategory,
 		maintanance,
-		_created_at,
-		_source_system
+		'bronze.erp_cat_g1v2'
 		from bronze.erp_cat_g1v2
 
 		set @target_rows=@@ROWCOUNT
@@ -266,6 +265,7 @@ begin
 		truncate table silver.sales
 
 		insert into silver.sales
+		(order_number,product_key,customer_id,order_date,ship_date,due_date,sales,quantity,price,_source_system)
 		select 
 		sls_ord_num as order_number,
 		sls_prd_key as product_key,
@@ -288,8 +288,7 @@ begin
 			 when sls_price<0 then abs(sls_price)
 			 else sls_price
 		end as price,
-		_created_at,
-		_source_system
+		'bronze.crm_sales_details'
 		from  bronze.crm_sales_details
 
 		set @target_rows=@@ROWCOUNT
