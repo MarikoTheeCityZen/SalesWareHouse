@@ -107,18 +107,24 @@ begin
 		truncate table gold.fact_sales
 		print('Inserting our Fact data : Sales')
 		insert into gold.fact_sales
-		(order_number,customer_id,product_key,order_date,ship_date,due_date,quantity,price,sales)
+		(order_number,line_item,customer_id,product_id,order_date,ship_date,due_date,quantity,price,sales)
 		select 
-		order_number,
-		customer_id,
-		product_key,
-		order_date,
-		ship_date,
-		due_date,
-		quantity,
-		price,
-		sales
-		from silver.sales
+				s.order_number,
+				ROW_NUMBER() over(partition by s.order_number order by s.order_date,sales) as line_item,
+				s.customer_id,
+				p.product_id,
+				s.order_date,
+				s.ship_date,
+				s.due_date,
+				s.quantity,
+				s.price,
+				s.sales
+		from silver.sales s
+		left  join silver.products p on
+		s.product_key=p._product_key and
+		s.order_date >= p.start_date and 
+		(s.order_date <= p.end_date or p.end_date is  null)
+		where _product_key is not null
 		set @target_rows=@@ROWCOUNT
 		
 		set @end_time=getdate()
