@@ -69,10 +69,10 @@ etl.table_log
 These tables record load status, row counts, execution time, and errors.
 
 ## Tools
-SQL Server
-T-SQL
-SQL Server Management Studio
-CSV
-Power BI (for downstream analysis)
+> SQL Server
+> T-SQL
+> SQL Server Management Studio
+> CSV
+> Power BI (for downstream analysis)
 
 **The project is being developed incrementally with a focus on understanding the reasoning behind each stage of the data engineering process.**
