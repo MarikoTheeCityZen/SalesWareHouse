@@ -1,0 +1,53 @@
+use SalesWH;
+go
+
+if OBJECT_ID(N'gold.dim_products','U') is not null
+	drop table gold.dim_products
+create table gold.dim_products
+(
+product_id int,
+product_key nvarchar(100),
+category_id nvarchar(100),
+_product_key nvarchar(100),
+product_number nvarchar(100),
+category nvarchar(100),
+subcategory nvarchar(100),
+product_line nvarchar(50),
+maintanance nvarchar(50),
+product_cost int,
+start_date date,
+end_date date
+)
+
+if OBJECT_ID(N'gold.dim_customers','U') is not null
+	drop table gold.dim_customers
+create table gold.dim_customers
+(
+customer_id int,
+customer_key varchar(100),
+first_name varchar(100),
+last_name varchar(100),
+gender varchar(50),
+marital_status varchar(100),
+country varchar(100),
+birthdate date,
+create_date date
+)
+
+if OBJECT_ID(N'gold.fact_sales','U') is not null
+	drop table gold.fact_sales
+create table gold.fact_sales
+(
+order_id int identity(1,1) primary key,
+order_number varchar(100),
+line_item int,
+customer_id int,
+product_id int,
+order_date date,
+ship_date date,
+due_date date,
+quantity int,
+price int,
+sales int
+)
+
