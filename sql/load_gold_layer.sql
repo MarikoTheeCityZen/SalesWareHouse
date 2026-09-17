@@ -29,7 +29,7 @@ begin
 		subcategory,product_line,maintanance,product_cost,start_date,end_date
 		)
 		select 
-		prod.product_id as product_id,
+		ROW_NUMBER() over(order by prod.product_id desc) as product_id,
 		prod.product_key as product_key,
 		prod.cat_id as category_id,
 		prod._product_key as _product_key,
