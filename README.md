@@ -1,7 +1,7 @@
-#**SalesWareHouse**
-Using SQL entirely We are going to build a data warehouse for a small online platform. Main goal is to sharpen SQL skills as well as get the basic overview of data engineering. With the warehouse as our single point of truth we are going to create a BI dashboard for our platform.
+# SalesWareHouse
+**Using SQL entirely We are going to build a data warehouse for a small online platform. Main goal is to sharpen SQL skills as well as get the basic overview of data engineering. With the warehouse as our single point of truth we are going to create a BI dashboard for our platform.**
 
-##**Project Overview**
+## Project Overview
 
 The project demonstrates an end-to-end data pipeline using a layered warehouse architecture:
 
@@ -19,7 +19,7 @@ Analytics / Power BI
 
 The goal is to take raw source data, clean and transform it, apply data quality checks, and produce a simple dimensional model for analysis.
 
-##**Architecture**
+## Architecture
 Landing
 
 The first layer where the CSV files are loaded with minimal changes. It acts as a temporary ingestion area.
@@ -49,7 +49,7 @@ fact_sales
 
 The model is designed to support reporting and analytical queries.
 
-##**ETL**
+## ETL
 
 The pipeline is implemented using SQL Server stored procedures.
 
@@ -68,7 +68,7 @@ etl.table_log
 
 These tables record load status, row counts, execution time, and errors.
 
-##**Tools**
+## Tools
 SQL Server
 T-SQL
 SQL Server Management Studio
