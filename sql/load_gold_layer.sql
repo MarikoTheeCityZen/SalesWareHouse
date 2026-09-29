@@ -78,7 +78,9 @@ begin
 			else mast.cst_gndr
 		end as gender,
 		mast.cst_marital_status as marital_status,
-		locs.country as country,
+		isnull(nullif(case when locs.country='US' or locs.country='United States' then 'USA'
+	 	when locs.country='DE' then 'Germany'
+		else locs.country end,''),'n/a') as country,
 		info.birthdate as birthdate,
 		mast.cst_create_date as create_date
 		from silver.customer_master mast
