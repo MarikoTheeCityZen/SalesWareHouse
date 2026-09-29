@@ -96,7 +96,9 @@ begin
 		case when cid like 'NAS%' then SUBSTRING(cid,4,len(cid))
 			 else cid
 		end as customer_key,
-		cast(bdate as date) as birthdate,
+		case when cast(bdate as date)>'2008-01-01' then null
+		else cast(bdate as date)
+		end as birthdate,
 		coalesce(case  trim(gen)
 			  when'F' then 'Female'
 			  when'M' then 'Male'
